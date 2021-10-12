@@ -24,5 +24,8 @@
   },
   "bin": {
     "my-package": "./index.js"
+  },
+  "dependencies": {
+    "puppeteer": "^10.4.0"
   }
 }
