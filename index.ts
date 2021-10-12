@@ -1,21 +1,48 @@
-import puppeteer from "puppeteer";
 import fs from "fs";
-(async () => {
-  const browser = await puppeteer.launch();
-  const page = await browser.newPage();
-  await page.goto("https://en.wikipedia.org/wiki/Node.js", {
-    waitUntil: "networkidle2",
-  });
-  const data = await page.$eval("*", (el) => {
-    const selection = window.getSelection();
-    const range = document.createRange();
-    range.selectNode(el);
-    selection?.removeAllRanges();
-    selection?.addRange(range);
-    return window.getSelection()?.toString();
-  });
-  console.log(data);
+import express, { Request, Response } from "express";
 
-  fs.writeFileSync("content.txt", data!);
-  await browser.close();
-})();
+const app = express();
+
+app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
+
+app.get("/", (req: Request, res: Response) => {
+  const file = fs.readFileSync("data.json");
+  res.send(file);
+});
+
+app.post("/", (req: Request, res: Response) => {
+  //const jsonObj = JSON.parse();
+  fs.writeFile("data.json", `${JSON.stringify(req.body)}`, (err) => {
+    if (err) {
+      res
+        .status(500)
+        .send("An error occured while writing JSON Object to File.");
+    }
+    res.send("JSON file has been saved.");
+  });
+});
+
+app.put("/", (req: Request, res: Response) => {
+  fs.writeFile("data.json", `${JSON.stringify(req.body)}`, (err) => {
+    if (err) {
+      res
+        .status(500)
+        .send("An error occured while writing JSON Object to File.");
+    }
+    res.send("JSON file has been updated.");
+  });
+});
+
+app.delete("/", (req: Request, res: Response) => {
+  fs.unlink("data.json", (err) => {
+    if (err) {
+      res.status(500).send("An error occured while delete File.");
+    }
+    res.send("JSON file has been deleted.");
+  });
+});
+
+app.listen(3000, () => {
+  console.log(`Server is running`);
+});
