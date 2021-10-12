@@ -1,48 +1,15 @@
-import fs from "fs";
-import express, { Request, Response } from "express";
+import express from "express";
+import readData from "./middleware/read-data";
+import router from "./routes";
 
 const app = express();
 
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
-app.get("/", (req: Request, res: Response) => {
-  const file = fs.readFileSync("data.json");
-  res.send(file);
-});
+app.use(readData);
 
-app.post("/", (req: Request, res: Response) => {
-  //const jsonObj = JSON.parse();
-  fs.writeFile("data.json", `${JSON.stringify(req.body)}`, (err) => {
-    if (err) {
-      res
-        .status(500)
-        .send("An error occured while writing JSON Object to File.");
-    }
-    res.send("JSON file has been saved.");
-  });
-});
-
-app.put("/", (req: Request, res: Response) => {
-  fs.writeFile("data.json", `${JSON.stringify(req.body)}`, (err) => {
-    if (err) {
-      res
-        .status(500)
-        .send("An error occured while writing JSON Object to File.");
-    }
-    res.send("JSON file has been updated.");
-  });
-});
-
-app.delete("/", (req: Request, res: Response) => {
-  fs.unlink("data.json", (err) => {
-    if (err) {
-      res.status(500).send("An error occured while delete File.");
-    }
-    res.send("JSON file has been deleted.");
-  });
-});
+app.use(router);
 
 app.listen(3000, () => {
-  console.log(`Server is running`);
+  console.log("Server listening on port 3000");
 });
