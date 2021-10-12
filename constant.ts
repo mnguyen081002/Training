@@ -1,2 +1,2 @@
-const path = "data.json";
+const path = 'users.json';
 export default path;

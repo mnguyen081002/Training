@@ -27,5 +27,6 @@ const jwtVerify = async (payload: AccountData, done: any) => {
     console.log(error);
   }
 };
+const jwtStrategy = new Strategy(opts, jwtVerify);
 
-export default new Strategy(opts, jwtVerify);
+export default jwtStrategy;
