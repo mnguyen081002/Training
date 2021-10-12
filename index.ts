@@ -17,9 +17,11 @@ app.post("/", (req: Request, res: Response) => {
     if (err) {
       res
         .status(500)
-        .send("An error occured while writing JSON Object to File.");
+        .send({
+          message: "An error occured while writing JSON Object to File.",
+        });
     }
-    res.send("JSON file has been saved.");
+    res.send({ message: "JSON file has been saved." });
   });
 });
 
@@ -28,18 +30,20 @@ app.put("/", (req: Request, res: Response) => {
     if (err) {
       res
         .status(500)
-        .send("An error occured while writing JSON Object to File.");
+        .send({
+          message: "An error occured while writing JSON Object to File.",
+        });
     }
-    res.send("JSON file has been updated.");
+    res.send({ message: "JSON file has been updated." });
   });
 });
 
 app.delete("/", (req: Request, res: Response) => {
   fs.unlink("data.json", (err) => {
     if (err) {
-      res.status(500).send("An error occured while delete File.");
+      res.status(500).send({ message: "An error occured while delete File." });
     }
-    res.send("JSON file has been deleted.");
+    res.send({ message: "JSON file has been deleted." });
   });
 });
 
