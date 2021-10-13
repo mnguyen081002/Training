@@ -2,6 +2,7 @@ import express, { Request, Response } from 'express';
 import { Post } from '../entity/Post';
 import userService from '../services/user.service';
 import postService from '../services/post.service';
+import { User } from '../entity/User';
 const router = express.Router();
 
 router.get('/', async (req: Request, res: Response) => {
@@ -11,7 +12,8 @@ router.get('/', async (req: Request, res: Response) => {
 
 router.post('/', async (req: Request, res: Response) => {
   const { title, body } = req.body;
-  const user = await userService.findOneUserById('111');
+  const userId = req.user as User;
+  const user = await userService.findOneUserById(userId.id);
   const post = await postService.createPost(title, body, user);
 
   res.send({ message: 'Create post successfully', post });

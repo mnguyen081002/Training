@@ -1,8 +1,10 @@
 import { StrategyOptions, ExtractJwt, Strategy } from 'passport-jwt';
+import { User } from '../entity/User';
 import config from './config';
+import logger from './logger';
 
 interface IPayload {
-  userId: string;
+  id: string;
   username: string;
 }
 
@@ -13,13 +15,14 @@ const opts: StrategyOptions = {
 
 const jwtVerify = async (payload: IPayload, done: any) => {
   try {
-    // if (user) {
-    //   return done(null, user);
-    // }
+    const user = await User.findOne({ where: { id: payload.id } });
+    if (!user) {
+      return done(null, false);
+    }
 
-    return done(null, false);
+    return done(null, user);
   } catch (error) {
-    console.log(error);
+    logger.error(error);
   }
 };
 const jwtStrategy = new Strategy(opts, jwtVerify);

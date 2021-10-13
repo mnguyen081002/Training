@@ -1,7 +1,9 @@
 import ApiError from '../utils/ApiError';
 import { Request, Response, NextFunction } from 'express';
 import config from '../config/config';
+import logger from '../config/logger';
 const errorHandler = (err: ApiError, req: Request, res: Response, next: NextFunction) => {
+  logger.info('aaaaa');
   let { statusCode, message } = err;
   res.locals.errorMessage = err.message;
   const response = {
@@ -11,7 +13,7 @@ const errorHandler = (err: ApiError, req: Request, res: Response, next: NextFunc
   };
 
   if (config.env === 'development') {
-    console.log(err);
+    logger.error(err);
   }
 
   res.status(statusCode).send(response);
