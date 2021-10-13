@@ -8,11 +8,15 @@ router.get('/', (req: Request, res: Response) => {
 });
 
 router.post('/', (req: Request, res: Response) => {
+  try {
+  } catch (error) {
+    console.log(error);
+    res.status(500).send({ message: 'An error occured while writing Post.' });
+  }
   fs.writeFile('data.json', `${JSON.stringify(req.body)}`, (err) => {
     if (err) {
-      res.status(500).send({ message: 'An error occured while writing JSON Object to File.' });
     }
-    res.send({ message: 'JSON file has been saved.' });
+    res.send({ message: 'Post has been saved.' });
   });
 });
 
