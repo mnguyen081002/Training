@@ -1,11 +1,11 @@
 import { NextFunction, Request, Response } from 'express';
 import passport from 'passport';
-import { AccountData } from './read-data';
+import { User } from '../entity/User';
 
-const verifyCallback = (resolve: any, reject: any, res: Response) => (err: Error, user: AccountData) => {
+const verifyCallback = (resolve: any, reject: any, res: Response) => (err: Error, user: User) => {
   if (!user || err) {
-    throw Error('Please authentication');
-    reject(err);
+    reject('Please authentication');
+    //throw Error('Please authentication');
   }
 
   res.locals.user = user;

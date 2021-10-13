@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "ts-node index.ts",
-    "dev": "npx ts-node-dev index.ts"
+    "dev": "npx ts-node-dev src/index.ts"
   },
   "repository": {
     "type": "git",
@@ -19,6 +19,7 @@
   },
   "homepage": "https://github.com/3langn/Training#readme",
   "devDependencies": {
+    "@types/bcrypt": "^5.0.0",
     "@types/express": "^4.17.13",
     "@types/node": "^16.10.3",
     "@types/passport": "^1.0.7",
@@ -29,11 +30,14 @@
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
+    "class-transformer": "^0.4.0",
     "dotenv": "^10.0.0",
     "express": "^4.17.1",
     "jsonwebtoken": "^8.5.1",
     "mysql2": "^2.3.0",
     "passport": "^0.5.0",
-    "passport-jwt": "^4.0.0"
+    "passport-jwt": "^4.0.0",
+    "typeorm": "^0.2.38",
+    "winston": "^3.3.3"
   }
 }
