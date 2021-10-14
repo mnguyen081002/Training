@@ -35,10 +35,6 @@ describe('Blog Api', () => {
     await getConnection().close();
   });
 
-  /**
-   * Test the sign up route
-   */
-
   describe('Auth routes', () => {
     describe('POST /sign-up', () => {
       it('Should create new user', async () => {
@@ -54,10 +50,6 @@ describe('Blog Api', () => {
         expect(res.body.message).to.equal('User already exists');
       });
     });
-
-    /**
-     * Test the sign in route
-     */
 
     describe('POST /sign-in', () => {
       it('Should user login successfully', async () => {
