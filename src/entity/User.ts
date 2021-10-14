@@ -20,7 +20,7 @@ export class User extends BaseEntity {
   @Column({ nullable: true })
   token?: string;
 
-  @OneToMany(() => Post, (post) => post.user)
+  @OneToMany(() => Post, (post) => post.user, { cascade: true })
   posts: Post[];
 
   @BeforeInsert()

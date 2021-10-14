@@ -11,8 +11,6 @@ const signUp = async (username: string, password: string) => {
     await user.save();
     return user.toJson();
   } catch (error) {
-    logger.error(error);
-
     let message = 'An error occurred';
     let code = 500;
     if (error instanceof Error) {
@@ -35,12 +33,11 @@ const signIn = async (username: string, password: string) => {
     }
     return user.generateToken();
   } catch (error) {
-    logger.error(error);
     let message = 'An error occurred';
     let code = 500;
     if (error instanceof Error) {
       message = error.message;
-      code = 400;
+      code = 401;
     }
     if (error instanceof ApiError) {
       message = error.message;
@@ -54,7 +51,7 @@ const checkUsernameAlreadyExists = async (username: string) => {
   let user = await User.findOne({ username });
 
   if (user) {
-    throw Error(`User ${username} already exists`);
+    throw new Error(`User already exists`);
   }
 };
 export default {

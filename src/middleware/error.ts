@@ -3,7 +3,6 @@ import { Request, Response, NextFunction } from 'express';
 import config from '../config/config';
 import logger from '../config/logger';
 const errorHandler = (err: ApiError, req: Request, res: Response, next: NextFunction) => {
-  logger.info('aaaaa');
   let { statusCode, message } = err;
   res.locals.errorMessage = err.message;
   const response = {

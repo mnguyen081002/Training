@@ -29,10 +29,7 @@ export class Post extends BaseEntity {
   updated_at: Date;
 
   @Exclude({ toPlainOnly: true })
-  @ManyToOne(() => User, (user) => user.posts, {
-    onDelete: 'CASCADE',
-    cascade: true,
-  })
+  @ManyToOne(() => User, (user) => user.posts, { onDelete: 'CASCADE' })
   @JoinColumn({ name: 'userId' })
   user: User;
 

@@ -7,6 +7,7 @@
   "database": "blog",
   "synchronize": true,
   "logging": false,
+  "dropSchema": true,
   "migrationsTableName": "migrations",
   "entities": ["src/entity/**/*.ts"],
   "migrations": ["src/migration/**/*.ts"],
