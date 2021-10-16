@@ -1,30 +1,65 @@
 # Training NodeJs
 ## Branchs are tasks
-### Docker là gì?
-- Docker là một nền tảng để cung cấp cách để building, deploying và running ứng dụng dễ dàng hơn bằng cách sử dụng các containers (trên nền tảng ảo hóa). Ban đầu viết bằng Python, hiện tại đã chuyển sang Golang.
-- Container trong Docker là gì?
-Các containers cho phép lập trình viên đóng gói một ứng dụng với tất cả các phần cần thiết, chẳng hạn như thư viện và các phụ thuộc khác, và gói tất cả ra dưới dạng một package.Bằng cách đó, nhờ vào container, ứng dụng sẽ chạy trên mọi máy Linux khác bất kể mọi cài đặt tùy chỉnh mà máy có thể có khác với máy được sử dụng để viết code.
-### Khái niệm liên quan
-- Docker Engine : là thành phần chính của Docker, như một công cụ để đóng gói ứng dụng
-- Docker Hub : là một “github for docker images”. Trên DockerHub có hàng ngàn public images được tạo bởi cộng đồng cho phép bạn dễ dàng tìm thấy những image mà bạn cần. Và chỉ cần pull về và sử dụng với một số config mà bạn mong muốn.
-- Images: là một khuôn mẫu để tạo một container. Thường thì image sẽ dựa trên 1 image có sẵn với những tùy chỉnh thêm. Ví dụ bạn build 1 image dựa trên image Centos mẫu có sẵn để chạy Nginx và những tùy chỉnh, cấu hình để ứng dụng web của bạn có thể chạy được. Bạn có thể tự build một image riêng cho mình hoặc sử dụng những image được chia sẽ từ cộng đồng - - Docker Hub. Một image sẽ được build dựa trên những chỉ dẫn của Dockerfile.
-- Container: là một instance của một image. Bạn có thể create, start, stop, move or delete container dựa trên Docker API hoặc Docker CLI.
-- Docker Client: là một công cụ giúp người dùng giao tiếp với Docker host.
-- Docker Daemon: lắng nghe các yêu cầu từ Docker Client để quản lý các đối tượng như Container, Image, Network và Volumes thông qua REST API. Các Docker Daemon cũng giao tiếp với nhau để quản lý các Docker Service.
-- Dockerfile: là một tập tin bao gồm các chỉ dẫn để build một image .
-- Volumes: là phần dữ liệu được tạo ra khi container được khởi tạo.
-### Quy trình thực thi của một hệ thống sử dụng Docker
-- Một hệ thống Docker được thực thi với 3 bước chính :
-  - Build
-Đầu tiên tạo một dockerfile, trong dockerfile này chính là code của chúng ta. Dockerfile này sẽ được Build tại một máy tính đã cài đặt Docker Engine. Sau khi build ta sẽ có được Container, trong Container này chứa ứng dụng kèm bộ thư viện của chúng ta.
+### Dockerfile là gì ?
+Docker sẽ xây dựng (build) docker image một cách tự động bằng cách đọc các chỉ thị (instruction) đã được khai báo trong một file có tên là Dockerfile. Dockerfile là một file văn bản chứa toàn bộ các chỉ thị lệnh mà người dùng muốn thực thi để tạo ra một Docker Image.Trình build docker image sẽ đọc nội dung file văn bản Dockerfile và gửi nội dung đó đến dịch vụ Docker đang chạy. Kế đến Docker sẽ chạy các chỉ thị trong Dockerfile từng dòng một, commit các kết quả của từng chỉ thị thành các lớp layer của image.
+Như vậy, Dockerfile giúp ta đơn giản hoá và tự động hoá việc xây dựng một Docker Image.
+### Cú pháp Dockerfile
+Các INSTRUCTION là các chỉ thị, được docker quy định. Khi khai báo phải viết chữ in hoa.
+Các arguments là đoạn nội dung mà chỉ thị sẽ làm gì.
+Một Dockerfile phải bắt đầu bằng chỉ thị ‘FROM‘ để khai báo base image nào sẽ được sử dụng để làm nền tảng xây dựng image.
+### Các chỉ thị (instruction) trong Dockerfile
+Giờ bạn sẽ đến với danh sách các chỉ thị (instruction) được Docker quy định cho phép sử dụng trong file Dockerfile dùng để build Docker Image.
+FROM
+Cú pháp:
 
-  - Push
-Sau khi có được Container, chúng ta thực hiện push Container này lên cloud và lưu tại đó.
+```FROM <image> [AS <name>]
+FROM <image>[:<tag>] [AS <name>]
+FROM <image>[@<digest>] [AS <name>]
+```
+Chỉ thị **FROM** dùng cho quá trình khởi tạo xây dựng một Docker Image mới và dùng để chỉ ra image gốc nào sẽ là cơ sở để build image thực hiện các chỉ thị kế tiếp. Như vậy, một Dockerfile hợp lệ thường phải bắt đầu bằng chỉ thị FROM . Các base image sẽ có thể được tải về từ Public Repository hoặc Private Repository riêng của người dùng setup.
 
-  - Pull, Run
-Nếu một máy tính khác muốn sử dụng Container chúng ta thì bắt buộc máy phải thực hiện việc Pull container này về máy, tất nhiên máy này cũng phải cài Docker Engine. Sau đó thực hiện Run Container này.
-### Vậy khi nào sử dụng Docker?
-- Triển khai kiến trúc Microservices.
-- Khi xây dựng ứng dụng và cần scale một cách linh hoạt.
-- Khi bạn muốn không tốn khá nhiều thời gian để config máy local và server cùng một môi trường để chạy được ứng dụng. Bạn chỉ cần build 1 lần chạy ở nhiều nơi mà thôi.
-- Sản phẩm của công ty bạn cần một cách tiếp cận mới về xây dựng, đẩy lên server, thực thi ứng dụng một cách nhanh chóng dễ dàng.
+Các giá trị thẻ (tag) hoặc digest là tùy chọn. Nếu bạn bỏ qua một trong số chúng, thì thẻ được sử dụng mặc định sẽ là ‘latest‘.
+Ví dụ :
+
+```
+FROM ubuntu
+```
+RUN
+
+Cú pháp:
+
+```
+RUN <command>  (shell form)
+RUN ["executable", "param1", "param2"]  (exec form)
+```
+Chỉ thị RUN dùng để chạy một lệnh bất kì trên lớp layer mới của Docker Image và commit kết quả của lệnh đó khi build image. Ví dụ như bạn chạy lệnh để cài đặt các gói chương trình, package,.. thì kết quả việc cài đặt sẽ gồm các chương trình được cài vào lớp layer mới trong  docker image. Bạn có thể thực hiện nhiều lệnh cùng lúc ở cách thức ‘shell form‘ khi sử dụng chỉ thị RUN với dấu ‘\‘.
+
+Ví dụ:
+
+```
+FROM ubuntu
+RUN apt-get update
+RUN apt-get install curl -y
+```
+
+CMD
+Cú pháp:
+```
+CMD ["executable","param1","param2"] (exec form)
+CMD ["param1","param2"] (tham số cho chỉ thị ENTRYPOINT)
+CMD command param1 param2 (shell form)
+```
+Chỉ thị CMD được sử dụng để cung cấp câu lệnh mặc định sẽ được chạy khi Docker Container khởi động từ Image đã build, chỉ có thể có duy nhất 1 chỉ thị CMD trong một. Có 3 cách thức sử dụng lệnh CMD:
+
+Sử dụng ở hình thức ‘exec form‘ với các tham số truyền vào.
+Sử dụng ở hình thức ‘shell form‘ như bình thường.
+Sử dụng ở hình thức truyền tham số cho chỉ thị ENTRYPOINT.
+Khi sử dụng CMD ở ‘shell‘ hoặc ‘exec‘ form thì lệnh chỉ thị CMD sẽ được thực thi khi khởi chạy Container Docker. Vậy có khác gì so với chỉ thị lệnh RUN ? RUN chạy lệnh và commit kết quả của lệnh trong quá trình build image. CMD không thực thi câu lệnh ở quá trình build image, mà sẽ thực thi trong quá trình chạy Docker Container từ Image đó.
+
+**ENTRYPOINT**
+Cú pháp:
+```
+ENTRYPOINT ["executable", "param1", "param2"] (exec form)
+ENTRYPOINT command param1 param2 (shell form)
+```
+Hai cái **CMD** và **ENTRYPOINT** có tác dụng tương tự nhau. Nếu một Dockerfile có cả **CMD** và **ENTRYPOINT** thì **CMD** sẽ thành param cho script **ENTRYPOINT**. Lý do người ta dùng ENTRYPOINT nhằm chuẩn bị các điều kiện setup như tạo user, mkdir, change owner… cần thiết để chạy service trong container.
